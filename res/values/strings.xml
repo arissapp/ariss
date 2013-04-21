@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ARISS</string>
+    <string name="action_settings">Settings</string>
+    <string name="cameraButton">ARISS Cam</string>
+    <string name="title_activity_arisscam">ARISSCam</string>
+    <string name="CamView">Cam View</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_arissnotifications">ARISSNotifications</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="arissmap">ARISS Map</string>
+    <string name="notifications">Notifications</string>
+    <string name="twitter">Twitter</string>
+
+</resources>

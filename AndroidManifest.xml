@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jala.ariss"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.jala.ariss.ARISSMap"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.jala.ariss.SpaceFinder"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_arisscam"
+            android:parentActivityName="com.jala.ariss.ARISSMap"
+            android:theme="@style/FullscreenTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jala.ariss.ARISSMap" />
+        </activity>
+        <activity
+            android:name="com.jala.ariss.ARISSNotifications"
+            android:label="@string/title_activity_arissnotifications"
+            android:parentActivityName="com.jala.ariss.ARISSMap" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jala.ariss.ARISSMap" />
+        </activity>
+    </application>
+
+</manifest>

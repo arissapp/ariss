@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>ARISS @SpaceApps</title>
+    <link href="css/default.css" rel="stylesheet">
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+	
+function initialize() {
+	  $.getJSON('http://open-notify-api.herokuapp.com/iss-now.json?callback=?', function(data) {
+	   var latitude = data["data"]["iss_position"]["latitude"];
+	   var longitude = data["data"]["iss_position"]["longitude"];
+		
+		var mapOptions = {
+			zoom: 5,
+			center: new google.maps.LatLng(latitude, longitude),
+			mapTypeId: google.maps.MapTypeId.SATELLITE 
+		  }
+	    var map = new google.maps.Map(document.getElementById('map-canvas'),
+									mapOptions);
+	  setMarkers(map, sights);
+	  setISSMarker(map);
+	});
+
+}
+
+
+
+var sights = [
+  ['Romulo:  hello to the space station', -17.782608,-63.184862, 4],
+  ['Danny: Hey trying the RASS ', -16.490813,-68.263855, 5],
+  ['Josh: RASS rocks ', -13.462047,-72.137451, 3],
+  ['Davor: Nice app', -27.28718,-55.638428, 2],
+  ['Eto: Hello', -17.091792,-49.123535, 1]
+];
+
+function setMarkers(map, locations) {
+
+  var image = {
+    url: 'images/person40x40.png',
+    size: new google.maps.Size(40, 40),
+    origin: new google.maps.Point(0,0),
+    anchor: new google.maps.Point(14,38)
+  };
+  var shadow = {
+    size: new google.maps.Size(37, 32),
+    origin: new google.maps.Point(0,0),
+    anchor: new google.maps.Point(0, 32)
+  };
+
+  var shape = {
+      coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+      type: 'poly'
+  };
+  for (var i = 0; i < locations.length; i++) {
+    var sight = locations[i];
+    var myLatLng = new google.maps.LatLng(sight[1], sight[2]);
+    var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        shadow: shadow,
+        icon: image,
+        shape: shape,
+        title: sight[0],
+        zIndex: sight[3]
+    });
+  }
+}
+
+var ISSMarker
+var LastLatLng 
+var lineCount
+
+function setISSMarker(map) {
+	 elapsedTime = new Date().getMilliseconds();
+	 
+   $.getJSON('http://open-notify-api.herokuapp.com/iss-now.json?callback=?', function(data) {
+	   var latitude = data["data"]["iss_position"]["latitude"];
+	   var longitude = data["data"]["iss_position"]["longitude"];
+  
+		  var image = {
+			url: 'images/spacestation_icon2.png',
+			size: new google.maps.Size(80, 56),
+			origin: new google.maps.Point(0,0),
+			anchor: new google.maps.Point(45, 30)
+		  };
+		  
+
+		  var shape = {
+			  coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+			  type: 'poly'
+		  };
+		  
+		  elapsedTime = new Date().getMilliseconds() - elapsedTime;
+		  
+			if (ISSMarker == undefined){
+				var myLatLng = new google.maps.LatLng(latitude, longitude);
+				LastLatLng = myLatLng;
+				lineCount = 1;
+				ISSMarker = new google.maps.Marker({
+					position: myLatLng,
+					map: map,
+					icon: image,
+					shape: shape,
+					title: 'ISS',
+					zIndex: 1
+				});
+			}else{
+				lineCount = lineCount+1;
+				var latlng = new google.maps.LatLng(latitude, longitude);
+				ISSMarker.setPosition(latlng);
+				//<<Set lines
+			    var lineCoordinates = [
+					LastLatLng,
+					latlng
+					];
+
+
+				var lineSymbol = {
+					path: 'M 0,-0.5 0,0.5',
+					strokeWeight: 5,
+					strokeOpacity: 1,
+					scale: 2
+				};
+				
+				var line = new google.maps.Polyline({
+					path: lineCoordinates,
+					strokeColor: "yellow",
+					strokeOpacity: 0,
+					icons: [{
+						icon: lineSymbol,
+						offset: '100%',
+						repeat: '15px'}],
+					map: map
+				});	
+				//End set lines>>
+				LastLatLng = latlng				
+			}
+			
+			setTimeout(function(){setISSMarker(map)}, 3000);
+	 });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+
+
+    </script>
+  </head>
+ <div><!-- Hupso Share Buttons - http://www.hupso.com/share/ --><a class="hupso_toolbar" href="http://www.hupso.com/share/"><img src="http://static.hupso.com/share/buttons/share-medium.png" style="border:0px; padding-top:5px; float:left;" alt="Share Button"/></a><script type="text/javascript">var hupso_services_t=new Array("Facebook","Twitter","Google Plus","Linkedin");var hupso_toolbar_size_t="medium";var hupso_counters_lang = "en_US";</script><script type="text/javascript" src="http://static.hupso.com/share/js/share_toolbar.js"></script><!-- Hupso Share Buttons --></div>
+  
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
